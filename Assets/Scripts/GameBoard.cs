@@ -8,7 +8,16 @@ public class GameBoard : MonoBehaviour
     public static int width = 20;
     public static int height = 30;
     public Transform[,] grid = new Transform[width, height];
+
+    public LineRenderer lineRendererPrefab; // 라인 렌더러 프리팹을 바인딩할 필드
+
+    private List<LineRenderer> gridLines = new List<LineRenderer>();
+
     
+    void Start()
+    {
+        DrawGrid();
+    }
     // 특정 좌표가 보드 내에 있는지 확인
     public static bool InsideBorder(Vector2 pos)
     {
@@ -73,26 +82,49 @@ public class GameBoard : MonoBehaviour
             }
         }
     }
-
-    // 그리드를 시각적으로 표시하는 메서드 (디버깅용)
-    void OnDrawGizmos()
+    
+    private void DrawGrid()
     {
-        Gizmos.color = Color.yellow; // 그리드의 색상을 노란색으로 설정
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x <= width; x++)
         {
-            for (int y = 0; y < height; y++)
-            {
-                // 그리드에 블록이 있는 경우 해당 위치에 큐브를 그린다
-                if (grid[x, y] != null)
-                {
-                    Gizmos.DrawCube(new Vector3(x, y, 0), Vector3.one);
-                }
-                else
-                {
-                    // 그리드에 블록이 없는 경우, 격자선을 그린다
-                    Gizmos.DrawWireCube(new Vector3(x, y, 0), Vector3.one);
-                }
-            }
+            CreateLine(new Vector3(x - 0.5f, -0.5f, 3), new Vector3(x - 0.5f, height - 1.5f, 3));
+        }
+
+        for (int y = 0; y < height; y++)
+        {
+            CreateLine(new Vector3(-0.5f, y - 0.5f, 3), new Vector3(width - 0.5f, y - 0.5f, 3));
         }
     }
-}
+
+    private void CreateLine(Vector3 start, Vector3 end)
+    {
+        LineRenderer line = Instantiate(lineRendererPrefab);
+        line.positionCount = 2;
+        line.SetPosition(0, start);
+        line.SetPosition(1, end);
+        gridLines.Add(line);
+    }
+
+    
+    // 그리드를 시각적으로 표시하는 메서드 (디버깅용)
+    // void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.yellow; // 그리드의 색상을 노란색으로 설정
+    //     for (int x = 0; x < width; x++)
+    //     {
+    //         for (int y = 0; y < height; y++)
+    //         {
+    //             // 그리드에 블록이 있는 경우 해당 위치에 큐브를 그린다
+    //             if (grid[x, y] != null)
+    //             {
+    //                 Gizmos.DrawCube(new Vector3(x, y, 0), Vector3.one);
+    //             }
+    //             else
+    //             {
+    //                 // 그리드에 블록이 없는 경우, 격자선을 그린다
+    //                 Gizmos.DrawWireCube(new Vector3(x, y, 0), Vector3.one);
+    //             }
+    //         }
+    //     }
+    // }
+} // end class

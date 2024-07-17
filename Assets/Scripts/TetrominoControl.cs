@@ -143,27 +143,26 @@ public class TetrominoControl : MonoBehaviour
         return true;
     }
 
-    private void UpdateGameBoard()
-    {
-        // 현재 블록의 모든 위치를 그리드에서 제거
-        for (int y = 0; y < GameBoard.height; ++y)
-        {
-            for (int x = 0; x < GameBoard.width; ++x)
-            {
-                if (gameBoard.grid[x, y] != null && gameBoard.grid[x, y].parent == transform)
-                {
-                    gameBoard.grid[x, y] = null;
-                }
-            }
-        }
-
-        // 새로운 위치에 블록 추가
-        foreach (Transform child in transform)
-        {
-            Vector2 pos = GameBoard.Round(child.position);
-            gameBoard.grid[(int)pos.x, (int)pos.y] = child;
-        }
-    }
+    // private void UpdateGameBoard()
+    // {
+    //     // 현재 블록의 모든 위치를 그리드에서 제거
+    //     for (int y = 0; y < GameBoard.height; ++y)
+    //     {
+    //         for (int x = 0; x < GameBoard.width; ++x)
+    //         {
+    //             if (gameBoard.grid[x, y] != null && gameBoard.grid[x, y].parent == transform)
+    //             {
+    //                 gameBoard.grid[x, y] = null;
+    //             }
+    //         }
+    //     }
+    //     // 새로운 위치에 블록 추가
+    //     foreach (Transform child in transform)
+    //     {
+    //         Vector2 pos = GameBoard.Round(child.position);
+    //         gameBoard.grid[(int)pos.x, (int)pos.y] = child;
+    //     }
+    // }
 
     private void AddToGrid()
     {
@@ -171,23 +170,7 @@ public class TetrominoControl : MonoBehaviour
         {
             Vector2 pos = GameBoard.Round(child.position);
             gameBoard.grid[(int)pos.x, (int)pos.y] = child;
-            
-            // // 게임 보드 범위 검사
-            // if (pos.x >= 0 && pos.x < GameBoard.width && pos.y >= 0 && pos.y < GameBoard.height)
-            // {
-            //     gameBoard.grid[(int)pos.x, (int)pos.y] = child;
-            // }
-            // else
-            // {
-            //     Debug.LogWarning($"Block at position {pos} is out of bounds and will not be added to the grid.");
-            // }
         }
-        
-        // foreach (Transform child in transform)
-        // {
-        //     Vector2 pos = GameBoard.Round(child.position);
-        //     gameBoard.grid[(int)pos.x, (int)pos.y] = child;
-        // }
     }
 
     // 가로 라인 블록이 가득 차있는지 체크
@@ -205,11 +188,10 @@ public class TetrominoControl : MonoBehaviour
             }
         }
     }
-
-    // 해당 라인의 블록을 아래로 내려주기
+    
     private void RowDown(int row)
     {
-        for (int y = row; y < GameBoard.height - 1; y++)
+        for (int y = row; y > 0; y--)
         {
             for (int x = 0; x < GameBoard.width; x++)
             {
@@ -223,4 +205,5 @@ public class TetrominoControl : MonoBehaviour
             }
         }
     }
+
 } // end class

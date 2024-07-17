@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     private int score;
     public Spawner spawner;
+    public TextMeshProUGUI text;
     
     private static GameManager instance;
 
@@ -53,5 +55,6 @@ public class GameManager : MonoBehaviour
     public void AddScore()
     {
         score += 100;
+        text.text = score.ToString();
     }
 } // end class
