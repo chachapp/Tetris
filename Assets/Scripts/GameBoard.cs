@@ -49,7 +49,7 @@ public class GameBoard : MonoBehaviour
         }
         return true;
     }
-
+    
     // 특정 행의 모든 블록을 제거
     public void RemoveRow(int y)
     {
@@ -63,9 +63,9 @@ public class GameBoard : MonoBehaviour
         }
 
         // 위의 모든 행을 한 칸 아래로 이동
-        for (int i = y + 1; i < height; ++i)
+        for (int i = y; i < height - 1; ++i)
         {
-            MoveRowDown(i);
+            MoveRowDown(i + 1);
         }
     }
 

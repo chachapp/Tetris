@@ -142,28 +142,7 @@ public class TetrominoControl : MonoBehaviour
         
         return true;
     }
-
-    // private void UpdateGameBoard()
-    // {
-    //     // 현재 블록의 모든 위치를 그리드에서 제거
-    //     for (int y = 0; y < GameBoard.height; ++y)
-    //     {
-    //         for (int x = 0; x < GameBoard.width; ++x)
-    //         {
-    //             if (gameBoard.grid[x, y] != null && gameBoard.grid[x, y].parent == transform)
-    //             {
-    //                 gameBoard.grid[x, y] = null;
-    //             }
-    //         }
-    //     }
-    //     // 새로운 위치에 블록 추가
-    //     foreach (Transform child in transform)
-    //     {
-    //         Vector2 pos = GameBoard.Round(child.position);
-    //         gameBoard.grid[(int)pos.x, (int)pos.y] = child;
-    //     }
-    // }
-
+    
     private void AddToGrid()
     {
         foreach (Transform child in transform)
@@ -172,8 +151,7 @@ public class TetrominoControl : MonoBehaviour
             gameBoard.grid[(int)pos.x, (int)pos.y] = child;
         }
     }
-
-    // 가로 라인 블록이 가득 차있는지 체크
+    
     private void CheckForCompletedRows()
     {
         for (int y = 0; y < GameBoard.height; y++)
@@ -181,28 +159,37 @@ public class TetrominoControl : MonoBehaviour
             if (gameBoard.IsRowFull(y))
             {
                 gameBoard.RemoveRow(y);
-                RowDown(y);
-                
+            
                 // 게임 점수 추가하기
                 GameManager.Instance.AddScore();
+            
+                // 현재 행이 제거되었으므로 다시 체크
+                y--;
             }
         }
     }
     
-    private void RowDown(int row)
+    private void RowDown(int startRow)
     {
-        for (int y = row; y > 0; y--)
+        for (int y = startRow; y > 0; y--)
         {
             for (int x = 0; x < GameBoard.width; x++)
             {
+                Debug.Log("RowDown : ");
+                
+                gameBoard.grid[x, y] = gameBoard.grid[x, y - 1];
+             
                 if (gameBoard.grid[x, y] != null)
                 {
-                    // 현재 위치의 블록을 아래로 이동
-                    gameBoard.grid[x, y - 1] = gameBoard.grid[x, y];
-                    gameBoard.grid[x, y] = null;
-                    gameBoard.grid[x, y - 1].position += Vector3.down;
+                    gameBoard.grid[x, y].position += Vector3.down;
                 }
             }
+        }
+
+        // 최상단 행을 비웁니다.
+        for (int x = 0; x < GameBoard.width; x++)
+        {
+            gameBoard.grid[x, 0] = null;
         }
     }
 
